@@ -219,10 +219,47 @@ class Tree {
         
         return orderArr;
     }
+
+    //root, left, right
+    preOrder(cb){
+        let discoveredNodesArr = [this.root];
+        let orderArr = [];
+        let rightBranchArr = []
+        do {
+            let currNode;
+            if(discoveredNodesArr.length > 0){
+                currNode = discoveredNodesArr.shift();
+            } else {
+                currNode = rightBranchArr.shift();
+            }
+
+            if(cb){
+                if(currNode){
+                    cb(currNode);
+                }
+            } else {
+                orderArr.push(currNode.value);
+            }
+
+            // first left
+            if(currNode.left){
+                discoveredNodesArr.push(currNode.left);
+            }
+
+            if(currNode.right){
+                rightBranchArr.unshift(currNode.right);
+            }
+
+            // then right
+        } while(discoveredNodesArr.length > 0 || rightBranchArr.length > 0)
+
+        if(!cb){
+            return orderArr;
+        }
+    }
 }
 
 let binaryTree = new Tree([1,2,3,4,5,6,8,9,10,12,13]);
-binaryTree.delete(3);
 //console.log(binaryTree.treatArr([9,2,3,1,3,5,8,6,10,12,13]), 'find')
 console.log(binaryTree.find(12), 'levelOrder');
-console.log(binaryTree.levelOrder(print), '<-----')
+console.log(binaryTree.preOrder(), '<-----')
