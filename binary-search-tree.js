@@ -257,9 +257,33 @@ class Tree {
             return orderArr;
         }
     }
+
+    postOrder(cb){
+        let orderArr = [];
+
+        function postOrderRecursion(root){
+            if(!root){
+                return;
+            } else {
+                postOrderRecursion(root.left);
+                postOrderRecursion(root.right);
+                orderArr.push(root.value);
+                if(cb){
+                    cb(root);
+                }
+            }
+        }
+
+        postOrderRecursion(this.root);
+    
+        if(!cb){
+            return orderArr;
+        }
+    }
+    
 }
 
 let binaryTree = new Tree([1,2,3,4,5,6,8,9,10,12,13]);
 //console.log(binaryTree.treatArr([9,2,3,1,3,5,8,6,10,12,13]), 'find')
-console.log(binaryTree.find(12), 'levelOrder');
-console.log(binaryTree.preOrder(), '<-----')
+
+console.log(binaryTree.postOrder(), '<-----')
