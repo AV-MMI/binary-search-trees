@@ -258,6 +258,7 @@ class Tree {
         }
     }
 
+    // left, right, root
     postOrder(cb){
         let orderArr = [];
 
@@ -281,6 +282,7 @@ class Tree {
         }
     }
 
+    // left, root, right
     inOrder(cb){
         let orderArr = [];
 
@@ -304,8 +306,67 @@ class Tree {
             return orderArr;
         }
     }
+
+    // node to leaf node
+    height(node){
+        
+        function recursiveHeight(node){
+            if(!node){
+                return -1;
+            } else {
+                let leftBranch = recursiveHeight(node.left);
+                let rightBranch = recursiveHeight(node.right);
+
+                return Math.max(leftBranch, rightBranch)+1;
+            }
+        }
+
+        return recursiveHeight(node);
+    }
+
+    // root to node
+    depth(node){
+
+        function recursiveDepth(node, tNode, n=0){
+            if(node == null){
+                return -1;
+            } else {
+                if(node.value == tNode.value){
+                    return n;
+                } else {
+                    let a = recursiveDepth(node.left, tNode, n+1);
+                    let b = recursiveDepth(node.right, tNode, n+1);
+
+                    return Math.max(a, b);
+                }
+            }
+        }
+
+        return recursiveDepth(this.root, node);
+    }
+
+    isBalanced(){
+        let leftHeight = this.height(this.root.left);
+        let rightHeight = this.height(this.root.right);
+
+        return (leftHeight == rightHeight);
+    }
+
+    rebalance(){
+        let treeArr = this.inOrder();
+
+        this.root = this.buildTree(treeArr);
+        return;
+    }
     
 }
 
 let binaryTree = new Tree([1,2,3,4,5,6]);
+binaryTree.insert(-1);
+console.log(binaryTree.find(6), 'find')
+console.log(binaryTree.isBalanced(), 'before rebalance');
+console.log(binaryTree.root.value, 'root');
+console.log(binaryTree.rebalance());
+console.log(binaryTree.isBalanced(), 'after rebalance')
+console.log(binaryTree.root.value, 'root');
 //console.log(binaryTree.treatArr([9,2,3,1,3,5,8,6,10,12,13]), 'find')
